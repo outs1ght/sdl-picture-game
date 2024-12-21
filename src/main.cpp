@@ -1,8 +1,13 @@
 #include <iostream>
         #include "SDL2/SDL.h"
         #include "SDL2_image-2.8.3/include/SDL_image.h"
-        
-        int main(int argc, char* argv[]) {
+
+   int x = 800;
+
+
+ int main(int argc, char* argv[]) {
+ start:
+
             if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
                 std::cout << "Error SDL2 Initialization : " << SDL_GetError();
                 return 1;
@@ -12,8 +17,10 @@
                 std::cout << "Error SDL2_image Initialization";
                 return 2;
             }
+
+
         
-            SDL_Window* window = SDL_CreateWindow("First program", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
+            SDL_Window* window = SDL_CreateWindow("First program", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, x, 600, SDL_WINDOW_OPENGL);
             if (window == NULL) {
                 std::cout << "Error window creation";
                 return 3;
@@ -41,15 +48,22 @@
         
             while (true) {
                 SDL_Event e;
-                if (SDL_PollEvent(&e)) {
+                if (SDL_PollEvent(&e))
+		  {
                     if (e.type == SDL_QUIT) {
                         break;
                     }
+		    if (e.key.keysym.sym == SDLK_w)
+		      x +=10;
+		    goto start;
                 }
+
         
                 SDL_RenderClear(renderer);
                 SDL_RenderCopy(renderer, lettuce_tex, NULL, NULL);
                 SDL_RenderPresent(renderer);
+
+
             }
         
             SDL_DestroyTexture(lettuce_tex);
